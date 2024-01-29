@@ -2,12 +2,23 @@
 **/*.zip
 **/*.tar
 **/*.tar.*
+FS/nvme.img
+
+FS/cp2m5
 
 # Docs
 Doc
 
-# baks and tmps
+# baks, tests and tmps
 bak/
 *.bak
 tmp/
 *.tmp
+test/
+
+# logs
+logs/
+FS/logs
+
+# symlinks
+cmds.gdb
