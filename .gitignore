@@ -3,3 +3,11 @@
 **/*.tar
 **/*.tar.*
 
+# Docs
+Doc
+
+# baks and tmps
+bak/
+*.bak
+tmp/
+*.tmp
