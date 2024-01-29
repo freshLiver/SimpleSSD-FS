@@ -43,11 +43,11 @@ HW_FLAGS	:= --num-cpu=${CORES} --cpu-clock=${CLK} ${CACHE} --cpu-type=${CPU} --m
 SYS_FLAGS	:= --kernel=${KERNEL} --disk-image=${DISK} ${DUAL} ${HW_FLAGS}
 SIMPLESSD_FLAGS	:= --ssd-interface=nvme --ssd-config=${SSS_CFG}
 
-GEM5_EXEC	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS} 
 
 #### config done ####
 
 GEM5_TARGET	= ${GEM5DIR}/${ISA}/gem5.${VARIANT}
+GEM5_EXEC	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS} 
 
 build: setup
 	scons ${GEM5_TARGET} -j 8 --ignore-style
