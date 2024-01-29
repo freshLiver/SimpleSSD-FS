@@ -4,6 +4,8 @@ GEM5DIR := ./build
 M5DIR	:= ${HOME}/m5
 LOG_DIR := ./logs
 
+TIME	:= $(shell date +%F-%H%M%S)
+
 export M5_PATH=${M5DIR}
 
 # ISA configs
@@ -31,8 +33,20 @@ DUAL	:=
 DPRINT_FLAGS	:= M5Print
 DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt
 
-LOG_FILE	:= ${LOG_DIR}/out-$(shell date +%F-%H%M%S).log
+M5_LOG_FILE	:= ${LOG_DIR}/m5-${TIME}.log
 
+GDB_LOGGING	:= on
+_GDB_LOGGING	= "set logging ${GDB_LOGGING}"
+GDB_LOG_FILE	:= ${LOG_DIR}/gdb-${TIME}.log
+_GDB_LOG_FILE	= "set logging file ${GDB_LOG_FILE}"
+
+GDB_PAGINATION	:= off
+_GDB_PAGINATION	= "set pagination ${GDB_PAGINATION}"
+
+GDB_STOP_SIG	:= SIGUSR1
+_GDB_STOP_SIG	= "handle ${GDB_STOP_SIG} nopass stop"
+
+GDB_EX_OPTIONS	= -ex ${_GDB_LOG_FILE} -ex ${_GDB_LOGGING} -ex ${_GDB_PAGINATION} -ex ${_GDB_STOP_SIG}
 
 # gem5 configs
 VARIANT 	:= opt
@@ -47,21 +61,24 @@ SIMPLESSD_FLAGS	:= --ssd-interface=nvme --ssd-config=${SSS_CFG}
 #### config done ####
 
 GEM5_TARGET	= ${GEM5DIR}/${ISA}/gem5.${VARIANT}
-GEM5_EXEC	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS} 
+GEM5_EXEC_CMD	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS} 
 
 build: setup
 	scons ${GEM5_TARGET} -j 8 --ignore-style
 
 run: setup
 	echo "M5_PATH at $$M5_PATH"
-	${GEM5_EXEC} | tee ${LOG_FILE}
+	${GEM5_EXEC_CMD} | tee ${M5_LOG_FILE}
 
 m5term:
 	${MAKE} -C util/term
 	./util/term/m5term localhost 3456
 
 gdb:
-	gdb -q --args ${GEM5_EXEC}
+	gdb -q ${GDB_EX_OPTIONS} --args ${GEM5_EXEC_CMD}
+
+gdb-stop:
+	pkill -${GDB_STOP_SIG} -o $(shell basename ${GEM5_TARGET})
 
 setup:
 	mkdir -p "${BDIR}"
