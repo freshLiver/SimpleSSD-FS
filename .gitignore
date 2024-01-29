@@ -3,6 +3,8 @@
 **/*.tar
 **/*.tar.*
 
+FS/cp2m5
+
 # Docs
 Doc
 
@@ -11,3 +13,6 @@ bak/
 *.bak
 tmp/
 *.tmp
+
+# logs
+logs/
