@@ -5,51 +5,20 @@
 		}
 	],
 	"settings": {
-		"hediet.vscode-drawio.offline": true,
-		"hediet.vscode-drawio.customColorSchemes": [
-			[
-				{ "fill": "#FB899E", "stroke": "#F9627D", "font": "#000000" },
-				{ "fill": "#F9627D", "stroke": "#F7264D", "font": "#000000" },
-				{ "fill": "#F7264D", "stroke": "#C5072A", "font": "#000000" },
-				{ "fill": "#C5072A", "stroke": "#660000", "font": "#FFFFFF" },
-		
-		
-				{ "fill": "#ffd599", "stroke": "#FFBB5C", "font": "#000000" },
-				{ "fill": "#FFBB5C", "stroke": "#FF9B50", "font": "#000000" },
-				{ "fill": "#FF9B50", "stroke": "#E25E3E", "font": "#000000" },
-				{ "fill": "#E25E3E", "stroke": "#C63D2F", "font": "#FFFFFF" },
-		
-				{ "fill": "#fbedb2", "stroke": "#f9e286", "font": "#000000" },
-				{ "fill": "#f9e286", "stroke": "#f5d03d", "font": "#000000" },
-				{ "fill": "#f5d03d", "stroke": "#e6bb10", "font": "#000000" },
-				{ "fill": "#e6bb10", "stroke": "#a7880c", "font": "#FFFFFF" },
-		
-				{ "fill": "#bfdfff", "stroke": "#80c0ff", "font": "#000000" },
-				{ "fill": "#80c0ff", "stroke": "#008fcc", "font": "#000000" },
-				{ "fill": "#008fcc", "stroke": "#005ab3", "font": "#000000" },
-				{ "fill": "#005ab3", "stroke": "#002db3", "font": "#FFFFFF" },
-			],
-			[
-				{ "fill": "#D0E7D2", "stroke": "#B0D9B1", "font": "#000000" },
-				{ "fill": "#B0D9B1", "stroke": "#79AC78", "font": "#000000" },
-				{ "fill": "#79AC78", "stroke": "#618264", "font": "#000000" },
-				{ "fill": "#618264", "stroke": "#4c674e", "font": "#FFFFFF" },
-		
-				{ "fill": "#7CDFCD", "stroke": "#55D6BE", "font": "#000000" },
-				{ "fill": "#55D6BE", "stroke": "#10b395", "font": "#000000" },
-				{ "fill": "#10b395", "stroke": "#0b7d68", "font": "#000000" },
-				{ "fill": "#0b7d68", "stroke": "#06463b", "font": "#FFFFFF" },
-		
-				{ "fill": "#F1EAFF", "stroke": "#E5D4FF", "font": "#000000" },
-				{ "fill": "#E5D4FF", "stroke": "#DCBFFF", "font": "#000000" },
-				{ "fill": "#DCBFFF", "stroke": "#D0A2F7", "font": "#000000" },
-				{ "fill": "#D0A2F7", "stroke": "#b772f3", "font": "#FFFFFF" },
-		
-				{ "fill": "#c4acec", "stroke": "#a782e3", "font": "#000000" },
-				{ "fill": "#a782e3", "stroke": "#885ad8", "font": "#000000" },
-				{ "fill": "#885ad8", "stroke": "#6d2fd0", "font": "#000000" },
-				{ "fill": "#6d2fd0", "stroke": "#4a2291", "font": "#FFFFFF" },
-			]
-		] 
+		"files.exclude": {
+			"**/*COPY*": true,
+			"**/*LICENSE*": true,
+			"**/*MAINTAINER*": true,
+			"FS/.github": true,
+			"FS/build_opts": true,
+			"FS/ext": true,
+			"FS/tests": true,
+			"FS/LICENSE": true,
+			"SSD/lib": true
+		},
+		"cSpell.words": [
+			"SLET",
+			"slpn"
+		]
 	}
 }
