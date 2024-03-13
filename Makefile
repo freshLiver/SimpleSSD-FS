@@ -13,7 +13,7 @@ ISA 	:= X86
 
 ifeq (${ISA},X86)
 KERNEL	:= x86_64-vmlinux-4.9.92
-DISK	:= ${M5DIR}/disks/x86root.img
+DISK	:= ${M5DIR}/disks/x86nvme.img
 else
 KERNEL	:= aarch64-vmlinux-4.9.92
 DISK	:= ${M5DIR}/disks/linaro-aarch64-linux.img
@@ -23,8 +23,8 @@ endif
 # hardware configs
 CPU	:= AtomicSimpleCPU
 CORES	:= 4
-CLK	:= 2GHz 
-CACHE	:= --caches --l2cache  
+CLK	:= 2GHz
+CACHE	:= --caches --l2cache
 MEM	:= DDR4_2400_8x8
 MEM_GB	:= 4
 DUAL	:=
@@ -35,8 +35,9 @@ DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt
 
 M5_LOG_FILE	:= ${LOG_DIR}/m5-${TIME}.log
 
+GDB_BIN		:= gdb
 GDB_LOGGING	:= on
-_GDB_LOGGING	= "set logging ${GDB_LOGGING}"
+_GDB_LOGGING	= "set logging ${GDB_LOGGING}" #"set trace-commands ${GDB_LOGGING}"
 GDB_LOG_FILE	:= ${LOG_DIR}/gdb-${TIME}.log
 _GDB_LOG_FILE	= "set logging file ${GDB_LOG_FILE}"
 
@@ -46,7 +47,8 @@ _GDB_PAGINATION	= "set pagination ${GDB_PAGINATION}"
 GDB_STOP_SIG	:= SIGUSR1
 _GDB_STOP_SIG	= "handle ${GDB_STOP_SIG} nopass stop"
 
-GDB_EX_OPTIONS	= -ex ${_GDB_LOG_FILE} -ex ${_GDB_LOGGING} -ex ${_GDB_PAGINATION} -ex ${_GDB_STOP_SIG}
+GDB_EX_OPTIONS	= -ex ${_GDB_LOG_FILE} -ex ${_GDB_LOGGING} -ex ${_GDB_PAGINATION} -ex ${_GDB_STOP_SIG} -ex "set print object on"
+_GDB_EX_OPTIONS = ${GDB_EX_OPTIONS}
 
 # gem5 configs
 VARIANT 	:= opt
@@ -61,7 +63,7 @@ SIMPLESSD_FLAGS	:= --ssd-interface=nvme --ssd-config=${SSS_CFG}
 #### config done ####
 
 GEM5_TARGET	= ${GEM5DIR}/${ISA}/gem5.${VARIANT}
-GEM5_EXEC_CMD	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS} 
+GEM5_EXEC_CMD	:= ${GEM5_TARGET} ${DEBUG_FLAGS} ${GEM5_CFG} ${SYS_FLAGS} ${SIMPLESSD_FLAGS}
 
 build: setup
 	scons ${GEM5_TARGET} -j 8 --ignore-style
@@ -75,7 +77,7 @@ m5term:
 	./util/term/m5term localhost 3456
 
 gdb:
-	gdb -q ${GDB_EX_OPTIONS} --args ${GEM5_EXEC_CMD}
+	${GDB_BIN} -q ${_GDB_EX_OPTIONS} --args ${GEM5_EXEC_CMD}
 
 gdb-stop:
 	pkill -${GDB_STOP_SIG} -o $(shell basename ${GEM5_TARGET})
