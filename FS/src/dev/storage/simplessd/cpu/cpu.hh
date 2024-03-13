@@ -115,7 +115,7 @@ class CPU : public StatObject {
   // CPIs
   std::unordered_map<uint16_t, std::unordered_map<uint16_t, InstStat>> cpi;
 
-  uint32_t leastBusyCPU(std::vector<Core> &);
+  uint32_t leastBusyCPU(std::vector<Core> &, uint32_t);
   void calculatePower(Power &);
 
  public:
@@ -124,7 +124,7 @@ class CPU : public StatObject {
 
   void execute(NAMESPACE, FUNCTION, DMAFunction &, void * = nullptr,
                uint64_t = 0);
-  uint64_t applyLatency(NAMESPACE, FUNCTION);
+  uint64_t applyLatency(NAMESPACE, FUNCTION, uint32_t = 0);
 
   void getStatList(std::vector<Stats> &, std::string) override;
   void getStatValues(std::vector<double> &) override;

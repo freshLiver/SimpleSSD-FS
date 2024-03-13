@@ -88,9 +88,9 @@ void commonCPUHandler(uint64_t, void *context) {
   delete pContext;
 }
 
-uint64_t applyLatency(CPU::NAMESPACE ns, CPU::FUNCTION fct) {
+uint64_t applyLatency(CPU::NAMESPACE ns, CPU::FUNCTION fct, uint32_t tgCore) {
   if (cpu) {
-    return cpu->applyLatency(ns, fct);
+    return cpu->applyLatency(ns, fct, tgCore);
   }
 
   return 0;

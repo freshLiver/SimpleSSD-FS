@@ -51,7 +51,7 @@ void printCPULastStat();
 
 void execute(CPU::NAMESPACE, CPU::FUNCTION, DMAFunction &, void * = nullptr,
              uint64_t = 0);
-uint64_t applyLatency(CPU::NAMESPACE, CPU::FUNCTION);
+uint64_t applyLatency(CPU::NAMESPACE, CPU::FUNCTION, uint32_t = 0);
 
 void commonCPUHandler(uint64_t, void *);
 

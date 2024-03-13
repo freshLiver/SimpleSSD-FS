@@ -23,6 +23,8 @@
 
 #include "sim/trace.hh"
 
+#define NUM_ISC_CORES 1
+
 namespace SimpleSSD {
 
 namespace CPU {
@@ -638,11 +640,11 @@ void CPU::calculatePower(Power &power) {
   mcpat.getPower(power);
 }
 
-uint32_t CPU::leastBusyCPU(std::vector<Core> &list) {
+uint32_t CPU::leastBusyCPU(std::vector<Core> &list, uint32_t nReserved = 0) {
   uint32_t idx = list.size();
   uint64_t busymin = std::numeric_limits<uint64_t>::max();
 
-  for (uint32_t i = 0; i < list.size(); i++) {
+  for (uint32_t i = 0; i < list.size() - nReserved; i++) {
     auto &core = list.at(i);
     auto busy = core.getStat().busy;
 
@@ -655,7 +657,7 @@ uint32_t CPU::leastBusyCPU(std::vector<Core> &list) {
   if (idx == list.size()) {
     uint64_t jobmin = std::numeric_limits<uint64_t>::max();
 
-    for (uint32_t i = 0; i < list.size(); i++) {
+    for (uint32_t i = 0; i < list.size() - nReserved; i++) {
       auto jobs = list.at(i).getJobListSize();
 
       if (jobs <= jobmin) {
@@ -677,7 +679,7 @@ void CPU::execute(NAMESPACE ns, FUNCTION fct, DMAFunction &func, void *context,
     case FTL:
     case FTL__PAGE_MAPPING:
       if (ftlCore.size() > 0) {
-        pCore = &ftlCore.at(leastBusyCPU(ftlCore));
+        pCore = &ftlCore.at(leastBusyCPU(ftlCore, NUM_ISC_CORES));
       }
 
       break;
@@ -730,7 +732,7 @@ void CPU::execute(NAMESPACE ns, FUNCTION fct, DMAFunction &func, void *context,
   }
 }
 
-uint64_t CPU::applyLatency(NAMESPACE ns, FUNCTION fct) {
+uint64_t CPU::applyLatency(NAMESPACE ns, FUNCTION fct, uint32_t tgCore) {
   Core *pCore = nullptr;
 
   // Find dedicated core
@@ -738,7 +740,7 @@ uint64_t CPU::applyLatency(NAMESPACE ns, FUNCTION fct) {
     case FTL:
     case FTL__PAGE_MAPPING:
       if (ftlCore.size() > 0) {
-        pCore = &ftlCore.at(leastBusyCPU(ftlCore));
+        pCore = &ftlCore.at(leastBusyCPU(ftlCore, NUM_ISC_CORES));
       }
 
       break;
