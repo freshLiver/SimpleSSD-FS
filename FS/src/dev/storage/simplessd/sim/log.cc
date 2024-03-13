@@ -107,6 +107,8 @@ const std::string logName[LOG_NUM] = {
     "FTL::PageMapping",   //!< LOG_FTL_PAGE_MAPPING
     "PAL",                //!< LOG_PAL
     "PAL::PALOLD",        //!< LOG_PAL_OLD
+    "ISC",                //!< LOG_ISC
+    "ISC::RUNTIME",       //!< LOG_ISC_RUNTIME
 };
 
 void debugprint(LOG_ID id, const char *format, ...) {

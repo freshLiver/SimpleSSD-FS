@@ -744,6 +744,10 @@ uint64_t CPU::applyLatency(NAMESPACE ns, FUNCTION fct, uint32_t tgCore) {
       }
 
       break;
+    case ISC:
+      pCore = &ftlCore.at(tgCore);
+
+      break;
     case ICL:
     case ICL__GENERIC_CACHE:
       if (iclCore.size() > 0) {

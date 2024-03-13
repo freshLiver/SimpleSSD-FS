@@ -39,6 +39,8 @@ typedef enum {
   LOG_FTL_PAGE_MAPPING,
   LOG_PAL,
   LOG_PAL_OLD,
+  LOG_ISC,
+  LOG_ISC_RUNTIME,
   LOG_NUM
 } LOG_ID;
 

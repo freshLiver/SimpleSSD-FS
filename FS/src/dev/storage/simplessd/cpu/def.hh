@@ -42,6 +42,7 @@ typedef enum : uint16_t {
   NVME__OCSSD,
   UFS__DEVICE,
   SATA__DEVICE,
+  ISC
 } NAMESPACE;
 
 typedef enum : uint16_t {

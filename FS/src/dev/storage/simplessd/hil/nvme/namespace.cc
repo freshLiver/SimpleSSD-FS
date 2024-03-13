@@ -22,6 +22,8 @@
 #include "hil/nvme/subsystem.hh"
 #include "util/algorithm.hh"
 
+#include "isc/runtime.hh"
+
 namespace SimpleSSD {
 
 namespace HIL {
@@ -439,7 +441,7 @@ void Namespace::read(SQEntryWrapper &req, RequestFunction &func) {
       if (pDisk) {
         pDisk->read(pContext->slba, pContext->nlb, pContext->buffer);
       }
-
+      ISC::Runtime::addSlet(ISC::SletType::APP);
       pContext->dma->write(0, pContext->nlb * info.lbaSize, pContext->buffer,
                            dmaDone, context);
     };
