@@ -6,14 +6,11 @@
 	],
 	"settings": {
 		"files.exclude": {
-			"**/*COPY*": true,
-			"**/*LICENSE*": true,
-			"**/*MAINTAINER*": true,
-			"FS/.github": true,
-			"FS/build_opts": true,
-			"FS/ext": true,
-			"FS/tests": true,
-			"FS/LICENSE": true,
+			"**/{*COPY*,*CONTRIBUT*,*Doxyfile*,*LICENSE*,*MAINTAINER*,*.hg*,.github,.gitmodules,*.py}": true,
+			"FS/{cp2m5,logs,m5out,build_opts,ext,include,test*,site_scons,system,util}": true,
+			"FS/src/{arch,base,cpu,doc,gpu*,kern,learn*,mem,sim,system*,*test*,*py*,*pro*}": true,
+			"FS/src/dev/{alpha,arm,i2c,mips,net,pci,ps2,serial,sparc,virt*,x86}": true,
+			"FS/src/dev/{b,B,d,D,i,I,m,p,P,r}*": true,
 			"SSD/lib": true
 		},
 		"cSpell.words": [
