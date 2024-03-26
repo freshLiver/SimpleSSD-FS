@@ -503,7 +503,8 @@ void Namespace::isc(SQEntryWrapper &req, RequestFunction &func) {
   bool err = false;
 
   CQEntryWrapper resp(req);
-  uint64_t slba = ((uint64_t)req.entry.dword11 << 32) | req.entry.dword10;
+  uint64_t slba = req.entry.dword10;
+  uint32_t sletid = (uint64_t)req.entry.dword11;
   uint16_t nlb = (req.entry.dword12 & 0xFFFF) + 1;
   // bool fua = req.entry.dword12 & 0x40000000;
 
@@ -518,12 +519,12 @@ void Namespace::isc(SQEntryWrapper &req, RequestFunction &func) {
   }
 
   debugprint(LOG_HIL_NVME,
-             "NVM     | READ  | SQ %u:%u | CID %u | NSID %-5d | %" PRIX64
+             "NVM     | ISC  | SQ %u:%u | CID %u | NSID %-5d | %" PRIX64
              " + %d",
              req.sqID, req.sqUID, req.entry.dword0.commandID, nsid, slba, nlb);
 
   if (!err) {
-    DMAFunction doRead = [this](uint64_t tick, void *context) {
+    DMAFunction doRead = [this, sletid](uint64_t tick, void *context) {
       DMAFunction dmaDone = [this](uint64_t tick, void *context) {
         IOContext *pContext = (IOContext *)context;
 
@@ -532,7 +533,7 @@ void Namespace::isc(SQEntryWrapper &req, RequestFunction &func) {
         if (pContext->beginAt == 2) {
           debugprint(
               LOG_HIL_NVME,
-              "NVM     | READ  | CQ %u | SQ %u:%u | CID %u | NSID %-5d | "
+              "NVM     | ISC  | CQ %u | SQ %u:%u | CID %u | NSID %-5d | "
               "%" PRIX64 " + %d | %" PRIu64 " - %" PRIu64 " (%" PRIu64 ")",
               pContext->resp.cqID, pContext->resp.entry.dword2.sqID,
               pContext->resp.sqUID, pContext->resp.entry.dword3.commandID, nsid,
@@ -550,6 +551,7 @@ void Namespace::isc(SQEntryWrapper &req, RequestFunction &func) {
         }
       };
 
+      ISC_STS sts = ISC_STS_FAIL;
       IOContext *pContext = (IOContext *)context;
 
       pContext->tick = tick;
@@ -563,7 +565,10 @@ void Namespace::isc(SQEntryWrapper &req, RequestFunction &func) {
         pDisk->read(pContext->slba, pContext->nlb, pContext->buffer);
       }
       // FIXME: should slet be executed after FTL finished?
-      Runtime::startSlet(0, pContext->buffer, pContext->nlb * info.lbaSize);
+      debugprint(LOG_HIL_NVME, "NVM     | ISC  | Try start slet %u", sletid);
+      sts = Runtime::startSlet(sletid, pContext->buffer,
+                               pContext->nlb * info.lbaSize);
+      pContext->resp.entry.dword3.status = sts;
       pContext->dma->write(0, pContext->nlb * info.lbaSize, pContext->buffer,
                            dmaDone, context);
     };
