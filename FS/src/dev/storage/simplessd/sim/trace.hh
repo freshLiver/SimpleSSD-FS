@@ -40,6 +40,8 @@ typedef enum {
   LOG_PAL,
   LOG_PAL_OLD,
   LOG_ISC,
+  LOG_ISC_SLET,
+  LOG_ISC_FSA,
   LOG_ISC_RUNTIME,
   LOG_NUM
 } LOG_ID;

@@ -23,7 +23,7 @@
 
 #include "sim/trace.hh"
 
-#define NUM_ISC_CORES 1
+#include "isc/configs.hh"
 
 namespace SimpleSSD {
 

@@ -108,6 +108,8 @@ const std::string logName[LOG_NUM] = {
     "PAL",                //!< LOG_PAL
     "PAL::PALOLD",        //!< LOG_PAL_OLD
     "ISC",                //!< LOG_ISC
+    "ISC::SLET",          //!< LOG_ISC_SLET
+    "ISC::FSA",           //!< LOG_ISC_FSA
     "ISC::RUNTIME",       //!< LOG_ISC_RUNTIME
 };
 
