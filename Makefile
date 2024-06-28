@@ -11,9 +11,11 @@ export M5_PATH=${M5DIR}
 # ISA configs
 ISA 	:= X86
 
+DISK_EX	:= ${M5DIR}/disks/listdir.img
+
 ifeq (${ISA},X86)
 KERNEL	:= x86_64-vmlinux-4.9.92
-DISK	:= ${M5DIR}/disks/x86nvme.img
+DISK	:= ${M5DIR}/disks/x86nvme.img ${DISK_EX}
 else
 KERNEL	:= aarch64-vmlinux-4.9.92
 DISK	:= ${M5DIR}/disks/linaro-aarch64-linux.img
@@ -56,7 +58,7 @@ GEM5_CFG	:= ./configs/example/fs.py
 SSS_CFG		:= ./src/dev/storage/simplessd/config/sample.cfg
 
 HW_FLAGS	:= --num-cpu=${CORES} --cpu-clock=${CLK} ${CACHE} --cpu-type=${CPU} --mem-size=${MEM_GB}GB --mem-type=${MEM}
-SYS_FLAGS	:= --kernel=${KERNEL} --disk-image=${DISK} ${DUAL} ${HW_FLAGS}
+SYS_FLAGS	:= --kernel=${KERNEL} $(addprefix --disk-image=,${DISK}) ${DUAL} ${HW_FLAGS}
 SIMPLESSD_FLAGS	:= --ssd-interface=nvme --ssd-config=${SSS_CFG}
 
 
