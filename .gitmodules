@@ -1,3 +1,6 @@
 [submodule "FS/src/dev/storage/simplessd/isc"]
 	path = FS/src/dev/storage/simplessd/isc
 	url = git@github.com:freshLiver/SimpleSSD-ISC.git
+[submodule "SimpleSSD-SASSD"]
+	path = FS/src/dev/storage/simplessd
+	url = git@github.com:freshLiver/SimpleSSD-SASSD.git
