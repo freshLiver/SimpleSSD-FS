@@ -22,3 +22,9 @@ FS/logs
 
 # symlinks
 cmds.gdb
+
+# workspace and runtime files
+.vscode/
+build
+*.img
+disks/
