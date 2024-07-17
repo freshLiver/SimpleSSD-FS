@@ -25,7 +25,7 @@ endif
 # hardware configs
 CPU	:= AtomicSimpleCPU
 CORES	:= 4
-CLK	:= 2GHz
+CLK	:= 3GHz
 CACHE	:= --caches --l2cache
 MEM	:= DDR4_2400_8x8
 MEM_GB	:= 4
