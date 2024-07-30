@@ -35,9 +35,10 @@ DUAL	:=
 DPRINT_FLAGS	:= M5Print
 DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt
 
-M5_LOG_FILE	:= ${LOG_DIR}/m5-${TIME}.log
-M5_STAT_FILE	:= ${LOG_DIR}/m5-${TIME}.stat.txt
-HOST_LOG_FILE	:= ${LOG_DIR}/m5-${TIME}.host.log
+M5_LOG_SUFFIX	:=
+M5_DEBUG_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.log
+M5_STAT_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.stat.txt
+M5_HOST_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.host.log
 
 GDB_BIN		:= gdb
 GDB_LOGGING	:= on
@@ -81,9 +82,9 @@ run-timing: run
 
 run: setup
 	echo "M5_PATH at $$M5_PATH"
-	touch ${M5_STAT_FILE}
-	ln -srf ${M5_STAT_FILE} m5out/stats.txt
-	${GEM5_EXEC_CMD} | tee ${M5_LOG_FILE}
+	touch ${M5_STAT_LOG}
+	ln -srf ${M5_STAT_LOG} m5out/stats.txt
+	${GEM5_EXEC_CMD} | tee ${M5_DEBUG_LOG}
 
 m5term:
 	${MAKE} -C util/term
@@ -91,7 +92,7 @@ m5term:
 
 .PHONY: socat
 socat:
-	./socat -R ${HOST_LOG_FILE} -,raw,echo=0 tcp:localhost:${PORT}
+	./socat -R ${M5_HOST_LOG} -,raw,echo=0 tcp:localhost:${PORT}
 
 gdb:
 	${GDB_BIN} -q ${_GDB_EX_OPTIONS} --args ${GEM5_EXEC_CMD}
