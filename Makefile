@@ -4,7 +4,7 @@ GEM5DIR := ./build
 M5DIR	:= ${HOME}/m5
 LOG_DIR := ./logs
 
-TIME	:= $(shell date +%F-%H%M%S)
+TIME	:= $(shell date +%y%m%d-%H%M%S)
 
 export M5_PATH=${M5DIR}
 
@@ -33,7 +33,7 @@ DUAL	:=
 
 # debug configs
 DPRINT_FLAGS	:= M5Print
-DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt
+DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt --listener-mode=on
 
 M5_LOG_SUFFIX	:=
 M5_DEBUG_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.log
@@ -93,6 +93,9 @@ m5term:
 .PHONY: socat
 socat:
 	./socat -R ${M5_HOST_LOG} -,raw,echo=0 tcp:localhost:${PORT}
+
+socat-background:
+	./socat -u tcp:localhost:${PORT} open:${M5_HOST_LOG},creat,append
 
 gdb:
 	${GDB_BIN} -q ${_GDB_EX_OPTIONS} --args ${GEM5_EXEC_CMD}
