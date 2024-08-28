@@ -1,6 +1,11 @@
 #!/bin/bash
 
-PORT=${1:-3456}
+ssfx="$1"
+PORT=${2:-3456}
+if [[ -z "$ssfx" ]]; then
+    echo "Usage: $0 sub-suffix [PORT]"
+    exit 1
+fi
 
 for dep in {1,4}; do
     for nf in {1000,2000,4000}; do
@@ -21,7 +26,7 @@ for dep in {1,4}; do
 
         cat "$TMP_FILE"
 
-        MAKE_ARGS="M5_LOG_SUFFIX=$sfx TIME=$(date +%y%m%d-%H%M%S)"
+        MAKE_ARGS="M5_LOG_SUFFIX=$sfx-$ssfx TIME=$(date +%y%m%d-%H%M%S)"
         make run-timing GEM5_SCRIPT=$TMP_FILE $MAKE_ARGS &> /dev/null &
         sleep 5
         make socat-background PORT=${PORT} $MAKE_ARGS &

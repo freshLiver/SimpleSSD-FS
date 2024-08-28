@@ -1,11 +1,17 @@
 #!/bin/bash
 
-PORT=${1:-3456}
+ssfx="$1"
+PORT=${2:-3456}
+if [[ -z "$ssfx" ]]; then
+    echo "Usage: $0 sub-suffix [PORT]"
+    exit 1
+fi
 
 workloads=(
     #"/md5/x100/ x100"
     "/md5/x500/ x500"
-    #"/md5/x1000/ x1000"
+    "/md5/x1000/ x1000"
+    "/md5/x1500/ x1500"
     #"/md5/x2000/ x2000"
     #"/md5/x4000/ x4000"
 )
@@ -23,7 +29,7 @@ for work in "${workloads[@]}"; do
 
     cat "$TMP_FILE"
 
-    MAKE_ARGS="M5_LOG_SUFFIX=$sfx TIME=$(date +%y%m%d-%H%M%S)"
+    MAKE_ARGS="M5_LOG_SUFFIX=$sfx-$ssfx TIME=$(date +%y%m%d-%H%M%S)"
     make run-timing GEM5_SCRIPT=$TMP_FILE $MAKE_ARGS &> /dev/null &
     sleep 5
     make socat-background PORT=${PORT} $MAKE_ARGS &
