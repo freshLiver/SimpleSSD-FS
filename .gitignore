@@ -28,3 +28,9 @@ cmds.gdb
 build
 *.img
 disks/
+Slets/
+Res/
+
+.editorconfig
+**/nnn*
+**/socat*
