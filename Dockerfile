@@ -12,6 +12,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt -y update && apt -y upgrade
 RUN apt -y install build-essential scons python-dev zlib1g-dev m4 cmake libprotobuf-dev protobuf-compiler libgoogle-perftools-dev git python-pip
 
+# additional libs
+RUN apt -y install libzstd-dev xxd
+
 # Create a user named `user` with sudo permission
 RUN apt -y install sudo nano
 RUN groupadd -g $GID -o user

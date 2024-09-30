@@ -959,8 +959,8 @@ if ret > 0:
           "Error: Build of SimpleSSD failed." + termcap.Normal)
     Exit(1)
 
-main.Append(LINKFLAGS=['-L' + workdir])
-main.Append(LIBS=['simplessd', 'mcpat'])
+main.Append(LINKFLAGS=['-L' + workdir, '-Llibs'])
+main.Append(LIBS=['simplessd', 'mcpat', 'cpptrace', 'dwarf', 'dl', 'z', 'zstd'])
 
 # Remove previous binaries to force scons to link newly built library
 for t in BUILD_TARGETS:
