@@ -8,7 +8,7 @@ if [[ -z "$ssfx" ]]; then
 fi
 
 for dep in {1,4}; do
-    for nf in {1000,2000,4000}; do
+    for nf in {500,1000,2000,4000}; do
         sfx="-d$dep-f$nf"
 
         subdir=""
