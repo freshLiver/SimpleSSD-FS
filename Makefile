@@ -36,7 +36,7 @@ DPRINT_FLAGS	:= M5Print
 DEBUG_FLAGS	:= --debug-flag=${DPRINT_FLAGS} --debug-file=debug.txt --listener-mode=on
 
 M5_LOG_SUFFIX	:=
-M5_DEBUG_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.log
+M5_DEBUG_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.debug.log
 M5_STAT_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.stat.txt
 M5_HOST_LOG	:= ${LOG_DIR}/${TIME}${M5_LOG_SUFFIX}.host.log
 
