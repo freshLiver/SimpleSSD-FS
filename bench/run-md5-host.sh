@@ -8,12 +8,10 @@ if [[ -z "$ssfx" ]]; then
 fi
 
 workloads=(
-    #"/md5/x100/ x100"
-    # "/md5/x500/ x500"
-    # "/md5/x1000/ x1000"
+    "/md5/x2000/ x2000"
     "/md5/x1500/ x1500"
-    # "/md5/x2000/ x2000"
-    #"/md5/x4000/ x4000"
+    "/md5/x1000/ x1000"
+    "/md5/x500/ x500"
 )
 
 for work in "${workloads[@]}"; do

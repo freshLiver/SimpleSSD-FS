@@ -1,35 +1,48 @@
 #!/bin/bash
 
-ssfx="$1"
+sfx="$1"
 PORT=${2:-3456}
-if [[ -z "$ssfx" ]]; then
-    echo "Usage: $0 sub-suffix [PORT]"
+if [[ -z "$sfx" ]]; then
+    echo "Usage: $0 suffix [PORT]"
     exit 1
 fi
 
+read WORKNAME WORKTYPE SLET_ID <<< "md5 fsa 2"
+
 workloads=(
-    #"/md5/x100/ x100"
-    # "/md5/x500/ x500"
-    # "/md5/x1000/ x1000"
-    "/md5/x1500/ x1500"
-    # "/md5/x2000/ x2000"
-    #"/md5/x4000/ x4000"
+    "1024-x2000"
+    "1024-x1500"
+    "1024-x1000"
+    "1024-x500"
+    "4096-x2000"
+    "256-x2000"
+    "512-x2000"
+    # "4096-x1500"
+    # "4096-x1000"
+    # "4096-x500"
+    # "256-x1500"
+    # "256-x1000"
+    # "256-x500"
+    # "512-x1500"
+    # "512-x1000"
+    # "512-x500"
 )
 
 for work in "${workloads[@]}"; do
-    read path sfx <<< "$work"
+    read task pattern <<< "$work"
+    path="/$WORKNAME/$task/"
 
-    TMP_FILE=$(mktemp -t gem5-md5-fsa-$sfx.XXXXXXXX)
+    TMP_FILE=$(mktemp -t gem5-$WORKNAME-$WORKTYPE-$task.XXXXXXXX)
 
     echo "
     #!/bin/bash
     mount /dev/sdb /mnt
-    /mnt/md5-fsa --dev /dev/nvme0n1 --ns 1 --id 2 --path $path -init
+    /mnt/$WORKNAME-$WORKTYPE --dev /dev/nvme0n1 --ns 1 --id $SLET_ID --path $path -init
     m5 exit" > "$TMP_FILE"
 
     cat "$TMP_FILE"
 
-    MAKE_ARGS="M5_LOG_SUFFIX=$sfx-$ssfx TIME=$(date +%y%m%d-%H%M%S)"
+    MAKE_ARGS="M5_LOG_SUFFIX=-$task-$sfx TIME=$(date +%y%m%d-%H%M%S)"
     make run-timing GEM5_SCRIPT=$TMP_FILE $MAKE_ARGS &> /dev/null &
     sleep 5
     make socat-background PORT=${PORT} $MAKE_ARGS &
