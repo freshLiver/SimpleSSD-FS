@@ -1,40 +1,46 @@
 #!/bin/bash
-
-ssfx="$1"
+sfx="$1"
 PORT=${2:-3456}
-if [[ -z "$ssfx" ]]; then
-    echo "Usage: $0 sub-suffix [PORT]"
+if [[ -z "$sfx" ]]; then
+    echo "Usage: $0 suffix [PORT]"
     exit 1
 fi
 
-for dep in {1,4}; do
-    for nf in {500,1000,2000,4000}; do
-        sfx="-d$dep-f$nf"
+read WORKNAME WORKTYPE SLET_ID <<< "statdir host"
 
-        subdir=""
-        if [[ "$dep" -eq 4 ]]; then
-            subdir="/1/2/3"
-        fi
+workloads=(
+    "1024-x2000"
+    "1024-x1500"
+    "1024-x1000"
+    "1024-x500"
 
-        TMP_FILE=$(mktemp -t gem5-statdir-host-$sfx.XXXXXXXX)
+    "4096-x2000"
+    "256-x2000"
+    "512-x2000"
+)
 
-        echo "
-        #!/bin/bash
-        mount /dev/sdb /mnt
-        mount /dev/nvme0n1 /nvme
-        /mnt/statdir-host --dir /nvme/statdir$sfx-contig$subdir
-        m5 exit" > "$TMP_FILE"
+for work in "${workloads[@]}"; do
+    read task pattern <<< "$work"
+    path="/$WORKNAME/$task/"
 
-        cat "$TMP_FILE"
+    TMP_FILE=$(mktemp -t gem5-$WORKNAME-$WORKTYPE-$task.XXXXXXXX)
 
-        MAKE_ARGS="M5_LOG_SUFFIX=$sfx-$ssfx TIME=$(date +%y%m%d-%H%M%S)"
-        make run-timing GEM5_SCRIPT=$TMP_FILE $MAKE_ARGS &> /dev/null &
-        sleep 5
-        make socat-background PORT=${PORT} $MAKE_ARGS &
+    echo "
+    #!/bin/bash
+    mount /dev/sdb /mnt
+    mount /dev/nvme0n1 /nvme
+    /mnt/$WORKNAME-$WORKTYPE --dir /nvme$path
+    m5 exit" > "$TMP_FILE"
 
-        # wait both gem5 and host
-        echo "Workload ($MAKE_ARGS) is running, wait for gem5 and host..."
-        jobs
-        wait $(jobs -p)
-    done
+    cat "$TMP_FILE"
+
+    MAKE_ARGS="M5_LOG_SUFFIX=-$task-$sfx TIME=$(date +%y%m%d-%H%M%S)"
+    make run-timing GEM5_SCRIPT=$TMP_FILE $MAKE_ARGS &> /dev/null &
+    sleep 5
+    make socat-background PORT=${PORT} $MAKE_ARGS &
+
+    # wait both gem5 and host
+    echo "Workload ($MAKE_ARGS) is running, wait for gem5 and host..."
+    jobs
+    wait $(jobs -p)
 done
