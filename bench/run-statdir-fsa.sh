@@ -11,13 +11,13 @@ read WORKNAME WORKTYPE SLET_ID <<< "statdir fsa 1"
 
 workloads=(
     "1024-x2000"
-    "1024-x1500"
+    # "1024-x1500"
     "1024-x1000"
     "1024-x500"
 
-    "4096-x2000"
-    "256-x2000"
-    "512-x2000"
+    # "4096-x2000"
+    # "256-x2000"
+    # "512-x2000"
 )
 
 for work in "${workloads[@]}"; do
